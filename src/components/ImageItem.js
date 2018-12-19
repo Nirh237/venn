@@ -11,13 +11,9 @@ class ImageItem extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      Title: props.Title,
-      Year: props.Year,
-      Runtime: props.Runtime,
-      Genre: props.Genre,
-      Director: props.Director,
-      Poster: props.Poster,
-      imdbID: props.imdbID,
+      Title: props.title,
+      Poster: 'https://farm'+props.farm+'.staticflickr.com/'+props.server+'/'+props.id+'_'+props.secret+'_m.jpg',
+
    
     };
   };
@@ -26,7 +22,8 @@ class ImageItem extends React.Component {
  
 
   render() {
-    const { Title, Year, Runtime, Genre, Director, Poster, imdbID } = this.props;
+    const { farm,id,secret,server,title } = this.props;
+    console.log('imageitem:',this.props);
     return (
 
       <Card className="card"  >
@@ -34,22 +31,16 @@ class ImageItem extends React.Component {
           component="img"
           alt="Contemplative Reptile"
           className="image"
-          image={Poster}/>
+          image={this.state.Poster}/>
         <CardContent className="Movie-Card">
 
           <div className="box-control">
 
             <div className="flex d-col movie-info">
 
-              <Typography className="txt" variant="headline" component="h2">{Title}</Typography>
+              <Typography className="txt" variant="headline" component="h2">{title}</Typography>
 
-              <Typography className="txt" >{Year}</Typography>
-
-              <Typography className="txt" component="p"> {Runtime} </Typography>
-
-              <Typography className="txt" component="p"> {Genre} </Typography>
-
-              <Typography className="txt" component="p"> {Director} </Typography>
+     
 
             </div>
 
