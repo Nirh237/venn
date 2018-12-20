@@ -12,18 +12,18 @@ class ImageItem extends React.Component {
     super(props)
     this.state = {
       Title: props.title,
-      Poster: 'https://farm'+props.farm+'.staticflickr.com/'+props.server+'/'+props.id+'_'+props.secret+'_m.jpg',
+      Poster: 'https://farm' + props.farm + '.staticflickr.com/' + props.server + '/' + props.id + '_' + props.secret + '_m.jpg',
 
-   
+
     };
   };
 
 
- 
+
 
   render() {
-    const { farm,id,secret,server,title } = this.props;
-    console.log('imageitem:',this.props);
+    const { farm, id, secret, server, title } = this.props;
+
     return (
 
       <Card className="card"  >
@@ -31,7 +31,7 @@ class ImageItem extends React.Component {
           component="img"
           alt="Contemplative Reptile"
           className="image"
-          image={this.state.Poster}/>
+          image={this.state.Poster} />
         <CardContent className="Movie-Card">
 
           <div className="box-control">
@@ -40,11 +40,11 @@ class ImageItem extends React.Component {
 
               <Typography className="txt" variant="headline" component="h2">{title}</Typography>
 
-     
+
 
             </div>
 
-         
+
           </div>
         </CardContent>
       </Card>

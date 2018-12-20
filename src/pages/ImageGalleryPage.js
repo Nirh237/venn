@@ -5,6 +5,7 @@ import ImageItem from '../components/ImageItem';
 import SearchBar from 'material-ui-search-bar';
 import { getImagesByTitle } from '../actions/images';
 import { startFindImage } from '../actions/images';
+import DownshiftMultiple from '../components/AutocompleteSearch';
 
 
 
@@ -15,36 +16,44 @@ class ImageGalleryPage extends React.Component {
         super(props)
         this.state = {
             title: '',
-            images: props.images
+            images: props.images,
+            searchNum: 0,
         };
     };
 
     onTitleChange = (e) => {
         const title = e;
-        
+
         this.setState(() => ({ title: title }));
-        console.log('titleOnTitleChane:', title);
-        this.props.startFindImage(this.state.title);
+        if (title === undefined || title === '') {
+            console.log("title is empty!!");
+            this.props.getImagesByTitle();
+        } else {
+            this.props.startFindImage(title, {
+                cache: false
+            });
+        }
+
     };
 
     handleFindImage = () => {
-        console.log('titleOnHandleFindImage:', this.state.title);
-        if (this.props.images.find((image) => image.title.includes(this.state.title))) {
-            console.log("find image!!!!!");
-        }
-   
-        this.props.startFindImage(this.state.title);
+
+        this.props.startFindImage(this.state.title, {
+            cache: true
+        });
+
+
     }
 
-    componentDidMount() {
-        this.props.getImagesByTitle();
+    async componentDidMount() {
+        await this.props.getImagesByTitle();
     }
 
 
 
     render() {
         const { images } = this.props;
-        console.log("images In Render:", images);
+
         return (
 
             <div className="Rectangle">
@@ -60,6 +69,11 @@ class ImageGalleryPage extends React.Component {
                             maxWidth: 800
                         }}
                     />
+                    
+                </div>
+                <DownshiftMultiple />
+                <div>
+
                 </div>
                 <div className="List">
                     {images.map((image) => { return <ImageItem key={image.id} {...image} />; })}
@@ -72,7 +86,7 @@ class ImageGalleryPage extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
     getImagesByTitle: (title) => dispatch(getImagesByTitle(title)),
-    startFindImage: (title) => dispatch(startFindImage(title))
+    startFindImage: (title, options) => dispatch(startFindImage(title, options))
 });
 
 const mapStateToProps = (state) => ({
