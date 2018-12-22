@@ -1,6 +1,6 @@
 import axios from 'axios';
 import ImageService from '../services/imageService';
-debugger;
+
 export const error = (msg) => ({
   type: 'ERROR',
   msg

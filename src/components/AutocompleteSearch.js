@@ -9,12 +9,10 @@ import Popper from '@material-ui/core/Popper';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import Chip from '@material-ui/core/Chip';
-import { getImagesByTitle } from '../actions/images';
-import { startFindImage } from '../actions/images';
-import { connect } from 'react-redux';
+
 
 const suggestions = [
-  { label: localStorage.getItem("search0") },
+  { label: 'Afghanistan' },
   { label: 'Aland Islands' },
   { label: 'Albania' },
   { label: 'Algeria' },
@@ -58,8 +56,8 @@ function renderInput(inputProps) {
       InputProps={{
         inputRef: ref,
         classes: {
-          root: "inputRoot",
-          input: "inputInput",
+          root: classes.inputRoot,
+          input: classes.inputInput,
         },
         ...InputProps,
       }}
@@ -130,7 +128,6 @@ class DownshiftMultiple extends React.Component {
 
   handleInputChange = event => {
     this.setState({ inputValue: event.target.value });
-    this.props.startFindImage(this.state.inputValue);
   };
 
   handleChange = item => {
@@ -173,7 +170,7 @@ class DownshiftMultiple extends React.Component {
           selectedItem: selectedItem2,
           highlightedIndex,
         }) => (
-          <div className={"container"}>
+          <div className={classes.container}>
             {renderInput({
               fullWidth: true,
               classes,
@@ -183,7 +180,7 @@ class DownshiftMultiple extends React.Component {
                     key={item}
                     tabIndex={-1}
                     label={item}
-                    className={"chip"}
+                    className={classes.chip}
                     onDelete={this.handleDelete(item)}
                   />
                 )),
@@ -192,11 +189,9 @@ class DownshiftMultiple extends React.Component {
                 placeholder: 'Select multiple countries',
               }),
               label: 'Label',
-              
             })}
-            
             {isOpen ? (
-              <Paper className={"paper"} square>
+              <Paper className={classes.paper} square>
                 {getSuggestions(inputValue2).map((suggestion, index) =>
                   renderSuggestion({
                     suggestion,
@@ -219,13 +214,37 @@ DownshiftMultiple.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-
-
-const mapDispatchToProps = (dispatch) => ({
-    getImagesByTitle: (title) => dispatch(getImagesByTitle(title)),
-    startFindImage: (title) => dispatch(startFindImage(title))
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    height: 250,
+  },
+  container: {
+    flexGrow: 1,
+    position: 'relative',
+  },
+  paper: {
+    position: 'absolute',
+    zIndex: 1,
+    marginTop: theme.spacing.unit,
+    left: 0,
+    right: 0,
+  },
+  chip: {
+    margin: `${theme.spacing.unit / 2}px ${theme.spacing.unit / 4}px`,
+  },
+  inputRoot: {
+    flexWrap: 'wrap',
+  },
+  inputInput: {
+    width: 'auto',
+    flexGrow: 1,
+  },
+  divider: {
+    height: theme.spacing.unit * 2,
+  },
 });
 
 
 
-export default connect(null, mapDispatchToProps)(DownshiftMultiple);
+export default withStyles(styles)(DownshiftMultiple);
