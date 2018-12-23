@@ -5,19 +5,20 @@ export const error = (msg) => ({
   msg
 });
 
-export const getImage = (images) => ({
+export const getAll = (images) => ({
   type: 'GET_IMAGE',
   images
 });
 
-const getImagesByTitle = () => {
+const getImages = (optins) => {
 
   return (dispatch) => {
 
-    return ImageService.get().then(res => {
+    return ImageService.get(optins).then(res => {
 
       if (res != null) {
-        dispatch(getImage(res));
+        debugger;
+        dispatch(getAll(res));
       }
       else {
         dispatch(error('Error'));
@@ -35,13 +36,13 @@ const startFindImage = (query, options) => {
     return ImageService.find(query, options).then(res => {
 
       if (res != null) {
-        dispatch(getImage(res));
+        dispatch(getAll(res));
       }
       else {
         dispatch(error('Error'));
       }
     }).catch((error) => {
-
+      
     })
 
   };
@@ -49,7 +50,7 @@ const startFindImage = (query, options) => {
 
 
 export {
-  getImagesByTitle,
+  getImages,
   startFindImage
 }
 

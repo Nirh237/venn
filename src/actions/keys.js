@@ -1,7 +1,7 @@
 
 import CacheService from '../services/cacheService';
 
-export const get = (keys) => ({
+export const getAllKeys = (keys) => ({
     type: 'GET_KEYS',
     keys
 });
@@ -12,7 +12,7 @@ const getKeys = () => {
     
         let keys = CacheService.getKeys();
         debugger;
-        dispatch(get(keys));
+        dispatch(getAllKeys(keys));
     }
 }
 

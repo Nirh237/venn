@@ -2,9 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
 import ImageItem from '../components/ImageItem';
-import { getImagesByTitle } from '../actions/images';
+import { getImages } from '../actions/images';
 import { startFindImage } from '../actions/images';
 import { getKeys } from '../actions/keys';
+import InfiniteScroll from 'react-infinite-scroller';
 
 
 
@@ -23,6 +24,8 @@ class ImageGalleryPage extends React.Component {
             keys: props.keys,
             searchNum: 0,
             selectedOption: null,
+            hasMore: true,
+            counter: 0
         };
 
     };
@@ -32,7 +35,7 @@ class ImageGalleryPage extends React.Component {
      */
     onValueChange = (e) => {
         const title = e;
-console.log("onValueChane:" , title);
+        console.log("onValueChane:", title);
 
         this.setState(() => ({ title: title }));
         if (title === undefined || title === '') {
@@ -49,7 +52,7 @@ console.log("onValueChane:" , title);
 
 
     async componentDidMount() {
-        await this.props.getImagesByTitle();
+        // await this.props.getImages();
         this.props.getKeys(); // get all the chace kays that save in the local storge.
 
     }
@@ -70,7 +73,7 @@ console.log("onValueChane:" , title);
                 httpRequest: false
             });
         } else {
-            this.props.getImagesByTitle();
+            this.props.getImages();
         }
     }
 
@@ -95,10 +98,13 @@ console.log("onValueChane:" , title);
             });
 
         }
-
-
     }
 
+    loadFunc = (page) => {
+        debugger;
+        this.props.getImages({ page: page });
+        //  this.setState({ hasMore: false });
+    }
 
 
 
@@ -133,15 +139,19 @@ console.log("onValueChane:" , title);
 
                 </div>
 
-                <div>
+                <div >
+                    <InfiniteScroll
+                        pageStart={0}
+                        loadMore={this.loadFunc}
+                        hasMore={true}
+                        loader={<div className="loader" key={0}>Loading ...</div>}
+                    >
+                        <div className="List">
+                            {images.map((image) => { return <ImageItem key={image.id} {...image} />; })}
+                        </div>
+                    </InfiniteScroll>
+                </div>
 
-                </div>
-                <div className="List">
-                    {
-                        images.length === 0 ?
-                        <div> Not Found Results </div> :
-                        images.map((image) => { return <ImageItem key={image.id} {...image} />; })}
-                </div>
             </div>
         )
     };
@@ -149,7 +159,7 @@ console.log("onValueChane:" , title);
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    getImagesByTitle: (title) => dispatch(getImagesByTitle(title)),
+    getImages: (title) => dispatch(getImages(title)),
     startFindImage: (query, options) => dispatch(startFindImage(query, options)),
     getKeys: () => dispatch(getKeys())
 });
@@ -166,3 +176,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(ImageGalleryPage);
 
 
 //this.props.getImagesByTitle(title);
+
+// <div className="List">
+// {
+//     images.length === 0 ?
+//     <div> Not Found Results </div> :
+
+//     images.map((image) => { return <ImageItem key={image.id} {...image} />; })}
+// </div>
