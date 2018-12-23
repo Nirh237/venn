@@ -1,4 +1,3 @@
-import axios from 'axios';
 import ImageService from '../services/imageService';
 
 export const error = (msg) => ({
@@ -30,10 +29,10 @@ const getImagesByTitle = () => {
 };
 
 
-const startFindImage = (title, options) => {
+const startFindImage = (query, options) => {
   return (dispatch) => {
 
-    return ImageService.find(title, options).then(res => {
+    return ImageService.find(query, options).then(res => {
 
       if (res != null) {
         dispatch(getImage(res));

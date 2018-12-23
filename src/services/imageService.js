@@ -12,20 +12,34 @@ const ImageService = {
 
     },
 
-    find: (title, options) => {
 
 
-        console.log(title);
+    find: (query, options) => {
+
+
+        console.log(query);
 
         let cache = options.cache;
+        let httpRequest = options.httpRequest;
 
         return new Promise((resolve, reject) => {
+            
 
-            let value = CacheService.get(title);
-            if (value !== null) {
-                console.log('from cache');
-                resolve(value);
+            let result = [];
+            query.forEach(key => {
+               let value = CacheService.get(key);
+                if(value)
+                {
+                   result = result.concat(value);
+                }
+              
+            });
+           
+            if (!httpRequest) {
+                console.log(result);
+                resolve(result);
             } else {
+             let title = query[0];
                 axios.post('https://api.flickr.com/services/rest/?method=flickr.photos.search&text=' + title + '&format=json&nojsoncallback=1&api_key=bac9f1ccfd854f27894fd47c4f01b1e8&content_type=1&is_getty=1')
                     .then(res => {
                         console.log('from http');

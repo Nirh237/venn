@@ -2,11 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
 import ImageItem from '../components/ImageItem';
-import SearchBar from 'material-ui-search-bar';
 import { getImagesByTitle } from '../actions/images';
 import { startFindImage } from '../actions/images';
 import { getKeys } from '../actions/keys';
-import DownshiftMultiple from '../components/AutocompleteSearch';
+
 
 
 import Select from 'react-select';
@@ -28,28 +27,26 @@ class ImageGalleryPage extends React.Component {
 
     };
 
-    onTitleChange = (e) => {
+    /**
+     * 
+     */
+    onValueChange = (e) => {
         const title = e;
+console.log("onValueChane:" , title);
 
         this.setState(() => ({ title: title }));
         if (title === undefined || title === '') {
             console.log("title is empty!!");
         } else {
-            this.props.startFindImage(title, {
-                cache: false
+            this.props.startFindImage([title], {
+                cache: false,
+                httpRequest: true
+
             });
         }
 
     };
 
-    handleFindImage = () => {
-
-        this.props.startFindImage(this.state.title, {
-            cache: true
-        });
-
-
-    }
 
     async componentDidMount() {
         await this.props.getImagesByTitle();
@@ -57,22 +54,49 @@ class ImageGalleryPage extends React.Component {
 
     }
 
-    onChangeInput(value) {
-        console.log(value);
-    }
+    /**
+     * on select values from list and search selected items
+     */
 
-    handleChange = (selectedOption) => {
+    onSelectValue = (selectedOption) => {
+
 
         console.log(`Option selected:`, selectedOption);
 
         if (selectedOption.length > 0) {
-            let title = selectedOption[0].value;
-            this.props.startFindImage(title, {
-                cache: true
+            let query = selectedOption.map(item => item.value);
+            this.props.startFindImage(query, {
+                cache: true,
+                httpRequest: false
             });
         } else {
             this.props.getImagesByTitle();
         }
+    }
+
+    /**
+     * on enter click event
+     * get data from server
+     * save search value to local storage
+     */
+    onEnter = (e) => {
+        console.log("onKeyDOwn");
+        console.log(e.keyCode);
+        console.log(this.state.title);
+
+        if (e.keyCode === 13) {
+            debugger;
+            e.preventDefault();
+            this.props.startFindImage([this.state.title], {
+                cache: true,
+                httpRequest: true
+            }).then(() => {
+                this.props.getKeys();
+            });
+
+        }
+
+
     }
 
 
@@ -87,48 +111,36 @@ class ImageGalleryPage extends React.Component {
             options.push({ value: key, label: key });
         });
 
-        // const options = [
-        //     { value: 'chocolate', label: 'Chocolate' },
-        //     { value: 'strawberry', label: 'Strawberry' },
-        //     { value: 'vanilla', label: 'Vanilla' }
-        // ]
-        //   <DownshiftMultiple onChange={this.onChangeInput} />
+
         return (
 
             <div className="Rectangle">
                 <Header />
                 <div className="SearchBar">
-                    <SearchBar
-                        onChange={this.onTitleChange}
-                        onRequestSearch={this.handleFindImage}
-                        style={{
 
-                            borderRadius: 10,
-                            margin: '0 auto',
-                            maxWidth: 800
-                        }}
+                    <Select
+                        defaultValue={[]}
+                        isMulti
+                        value={this.selectedOption}
+                        name="colors"
+                        options={options}
+                        onKeyDown={this.onEnter}
+                        onInputChange={this.onValueChange}
+                        onChange={this.onSelectValue}
+                        className="basic-multi-select"
+                        classNamePrefix="select"
                     />
 
                 </div>
-
-
-                <Select
-                    defaultValue={[]}
-                    isMulti
-                    value={this.selectedOption}
-                    name="colors"
-                    options={options}
-                    onInputChange={this.onTitleChange}
-                    onChange={this.handleChange}
-                    className="basic-multi-select"
-                    classNamePrefix="select"
-                />
 
                 <div>
 
                 </div>
                 <div className="List">
-                    {images.map((image) => { return <ImageItem key={image.id} {...image} />; })}
+                    {
+                        images.length === 0 ?
+                        <div> Not Found Results </div> :
+                        images.map((image) => { return <ImageItem key={image.id} {...image} />; })}
                 </div>
             </div>
         )
@@ -138,7 +150,7 @@ class ImageGalleryPage extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
     getImagesByTitle: (title) => dispatch(getImagesByTitle(title)),
-    startFindImage: (title, options) => dispatch(startFindImage(title, options)),
+    startFindImage: (query, options) => dispatch(startFindImage(query, options)),
     getKeys: () => dispatch(getKeys())
 });
 
