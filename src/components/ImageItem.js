@@ -32,11 +32,11 @@ class ImageItem extends React.Component {
           alt="Contemplative Reptile"
           className="image"
           image={this.state.Poster} />
-        <CardContent className="Movie-Card">
+        <CardContent className="Image-Card">
 
           <div className="box-control">
 
-            <div className="flex d-col movie-info">
+            <div className="flex d-col image-info">
 
               <Typography className="txt" variant="headline" component="h2">{title}</Typography>
 

@@ -7,7 +7,7 @@
     position: relative;
   
     &:hover {
-      .Movie-Card {
+      .Image-Card {
         display: block;
       }
     }
@@ -53,7 +53,7 @@
       height:145px;
     }
   
-   .Movie-Card {
+   .Image-Card {
      display: none;
       width: 100%;
       bottom: 0;
@@ -67,7 +67,7 @@
         margin: 10px;
         text-align: center;
   
-        .movie-info {
+        .image-info {
           padding: 10px;
           background-color: #313131d9;
           border-radius: 10px;
