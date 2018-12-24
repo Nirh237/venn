@@ -11,13 +11,13 @@ class App extends React.Component {
 
   render() {
     return (
-  <Provider store={store}>
-    <ImageGalleryPage />
-  </Provider>
-);
-}
+      <Provider store={store}>
+        <ImageGalleryPage />
+      </Provider>
+    );
+  }
 }
 
 export default App;
 
- 
+

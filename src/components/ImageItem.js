@@ -13,8 +13,6 @@ class ImageItem extends React.Component {
     this.state = {
       Title: props.title,
       Poster: 'https://farm' + props.farm + '.staticflickr.com/' + props.server + '/' + props.id + '_' + props.secret + '_m.jpg',
-
-
     };
   };
 
@@ -40,10 +38,7 @@ class ImageItem extends React.Component {
 
               <Typography className="txt" variant="headline" component="h2">{title}</Typography>
 
-
-
             </div>
-
 
           </div>
         </CardContent>

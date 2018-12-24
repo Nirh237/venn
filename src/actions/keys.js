@@ -9,9 +9,8 @@ export const get = (keys) => ({
 const getKeys = () => {
     return (dispatch) => {
 
-    
+
         let keys = CacheService.getKeys();
-        debugger;
         dispatch(get(keys));
     }
 }
